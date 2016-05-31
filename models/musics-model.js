@@ -13,10 +13,16 @@ const musicsSchema = database.mongoose.Schema({
         type: String,
         required: true
     },
-    type: {
-        type: String,
-        required: true
-    }
+    music: [{
+        type: {
+            type: String,
+            required: true
+        },
+        content: {
+            type: String,
+            required: true
+        }
+    }]
 });
 
 module.exports.musics = database.db.model('musics', musicsSchema);

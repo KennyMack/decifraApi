@@ -4,19 +4,79 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
+const musicsController = require('../controllers/musics-controller');
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
+    musicsController.list()
+        .then((musics)=>{
+            res.json({
+                success: true,
+                data: musics
+            });
+        })
+        .catch((err)  => {
+            res.json({
+                success: false,
+                data: err
+            });
+        });
+});
+
+router.get('/artist/:nameArtist', (req, res, next) => {
+    let nameArtist = req.params.nameArtist || '';
+
+    musicsController.listByArtist(nameArtist)
+        .then((musics)=>{
+            res.json({
+                success: true,
+                data: musics
+            });
+        })
+        .catch((err)  => {
+            res.json({
+                success: false,
+                data: err
+            });
+        });
 
 });
 
-router.get('/artist/:idArtist', (req, res, next) => {
+router.get('/music/:nameMusic', (req, res, next) => {
+    let nameMusic = req.params.nameMusic || '';
 
+    musicsController.listByMusic(nameMusic)
+        .then((musics)=>{
+            res.json({
+                success: true,
+                data: musics
+            });
+        })
+        .catch((err)  => {
+            res.json({
+                success: false,
+                data: err
+            });
+        });
 });
 
 router.get('/artist/:nameArtist/music/:nameMusic', (req, res, next) => {
+    let nameArtist = req.params.nameArtist || '';
+    let nameMusic = req.params.nameMusic || '';
 
-
+    musicsController.listByMusicAndArtist(nameArtist, nameMusic)
+        .then((musics)=>{
+            res.json({
+                success: true,
+                data: musics
+            });
+        })
+        .catch((err)  => {
+            res.json({
+                success: false,
+                data: err
+            });
+        });
 });
 
 module.exports = router;
