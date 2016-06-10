@@ -10,10 +10,18 @@ var musicsController = require('../controllers/musics-controller');
 /* GET home page. */
 router.get('/', function (req, res, next) {
     musicsController.list().then(function (musics) {
-        res.json({
-            success: true,
-            data: musics
-        });
+
+        if (musics.length > 0) {
+            res.json({
+                success: true,
+                data: musics
+            });
+        } else {
+            res.json({
+                success: false,
+                data: musics
+            });
+        }
     }).catch(function (err) {
         res.json({
             success: false,
@@ -26,10 +34,18 @@ router.get('/artist/:nameArtist', function (req, res, next) {
     var nameArtist = req.params.nameArtist || '';
 
     musicsController.listByArtist(nameArtist).then(function (musics) {
-        res.json({
-            success: true,
-            data: musics
-        });
+
+        if (musics.length > 0) {
+            res.json({
+                success: true,
+                data: musics
+            });
+        } else {
+            res.json({
+                success: false,
+                data: musics
+            });
+        }
     }).catch(function (err) {
         res.json({
             success: false,
@@ -42,10 +58,18 @@ router.get('/music/:nameMusic', function (req, res, next) {
     var nameMusic = req.params.nameMusic || '';
 
     musicsController.listByMusic(nameMusic).then(function (musics) {
-        res.json({
-            success: true,
-            data: musics
-        });
+
+        if (musics.length > 0) {
+            res.json({
+                success: true,
+                data: musics
+            });
+        } else {
+            res.json({
+                success: false,
+                data: musics
+            });
+        }
     }).catch(function (err) {
         res.json({
             success: false,
@@ -59,10 +83,41 @@ router.get('/artist/:nameArtist/music/:nameMusic', function (req, res, next) {
     var nameMusic = req.params.nameMusic || '';
 
     musicsController.listByMusicAndArtist(nameArtist, nameMusic).then(function (musics) {
+        if (musics.length > 0) {
+            res.json({
+                success: true,
+                data: musics
+            });
+        } else {
+            res.json({
+                success: false,
+                data: musics
+            });
+        }
+    }).catch(function (err) {
         res.json({
-            success: true,
-            data: musics
+            success: false,
+            data: err
         });
+    });
+});
+
+router.get('/all/artist/:nameArtist/music/:nameMusic', function (req, res, next) {
+    var nameArtist = req.params.nameArtist || '';
+    var nameMusic = req.params.nameMusic || '';
+
+    musicsController.listByMusicOrArtist(nameArtist, nameMusic).then(function (musics) {
+        if (musics.length > 0) {
+            res.json({
+                success: true,
+                data: musics
+            });
+        } else {
+            res.json({
+                success: false,
+                data: musics
+            });
+        }
     }).catch(function (err) {
         res.json({
             success: false,

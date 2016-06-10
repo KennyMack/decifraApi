@@ -51,6 +51,30 @@ module.exports.listByMusicAndArtist = (nameArtist, nameMusic) => {
     });
 };
 
+// List Musics By Music Name or Artist Name
+module.exports.listByMusicOrArtist = (nameArtist, nameMusic) => {
+    return new Promise( (resolve, reject) => {
+        let query = {
+            name: new RegExp(nameMusic, "i"),
+            artist: new RegExp(nameArtist, "i")
+        };
+
+        musicsModel.musics.find({
+            $or: [
+            {
+                'name': new RegExp(nameMusic, "i")
+            },
+            {
+                'artist': new RegExp(nameArtist, "i")
+            }
+            ]
+        })
+            .exec()
+            .then(resolve, reject);
+
+    });
+};
+
 
 
 // Get Music By Id
@@ -70,66 +94,3 @@ module.exports.removeById = (id) => {
             .then(resolve, reject);
     });
 };
-
-
-/*
-
-// Create a Course Type
-module.exports.createCourseType = (courseType) => {
-    return new Promise( (resolve, reject) => {
-        new musicsModel.musics({
-            'description': courseType['description']
-        }).save()
-            .then(resolve, reject);
-    });
-};
-
-// Update a Course Type
-module.exports.updateCourseType =  (courseType) => {
-    return new Promise( (resolve, reject) => {
-        let query = {_id: courseType['_id']};
-        let data = {
-            'description': courseType['description']
-        };
-
-        musicsModel.musics.findOneAndUpdate(query, data, { upsert: false, new: true })
-            .exec()
-            .then(resolve, reject);
-    });
-};
-
-module.exports.validateCourseType =  (courseType, status) => {
-    return new Promise( (resolve, reject) => {
-        let objRet = {};
-
-        if (status !== utils.OPERATION_STATUS.DELETE &&
-            status !== utils.OPERATION_STATUS.SELECT) {
-            courseType['description'] = validator.trim(validator.escape(courseType['description'].toString() || ''));
-
-            if (validator.isNull(courseType['description']))
-                objRet['description'] = 'Descrição é de preenchimento obrigatório.';
-
-        }
-
-        if (status === utils.OPERATION_STATUS.UPDATE ||
-            status === utils.OPERATION_STATUS.SELECT ||
-            status === utils.OPERATION_STATUS.DELETE) {
-            courseType['_id'] = validator.trim(validator.escape(courseType['_id'].toString() || ''));
-
-            let idNull = validator.isNull(courseType['_id']);
-
-            if (idNull)
-                objRet['_id'] = 'Id do Tipo do curso é de preenchimento obrigatório.';
-
-            if (!idNull && (!validator.isMongoId(courseType['_id'])))
-                objRet['_id'] = 'Id do Tipo do curso informado é inválido.';
-        }
-
-        if (Object.keys(objRet).length !== 0) {
-            reject(objRet);
-        }
-        else {
-            resolve(courseType);
-        }
-    });
-};*/
